@@ -76,7 +76,7 @@ class InvisibleRecaptcha extends Widget
 	 * 
 	 * @return void
 	 */
-	protected function _registerJs($callBack)
+	protected function _registerJs()
 	{
 		$this->getView()->registerJs($this->_getCallbackFunction(), View::POS_BEGIN);
 		$this->getView()->registerJsFile(self::JS_API_URL, [
