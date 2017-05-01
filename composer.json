@@ -7,11 +7,12 @@
     "source": "https://github.com/szaboolcs/yii2-invisible-recaptcha",
     "issues": "https://github.com/szaboolcs/yii2-invisible-recaptcha/issues"
 	},
-	"authors": {
-			"name": "szaboolcs",
-			"homepage": "https://github.com/szaboolcs"
-		}
-	],
+	"authors": [
+    {
+      "name": "szaboolcs",
+      "homepage": "https://github.com/szaboolcs"
+    }
+  ],
 	"require": {
     "yiisoft/yii2": "*"
 	},
