@@ -1,5 +1,5 @@
 <?php
-namespace app\components;
+namespace szaboolcs\recaptcha;
 
 use yii\helpers\Json;
 use Yii;

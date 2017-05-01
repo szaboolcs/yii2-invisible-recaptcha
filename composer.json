@@ -1,0 +1,32 @@
+{
+	"name" : "szaboolcs/yii2-invisible-recaptcha",
+	"description" : "Google Invisible reCaptcha for Yii2",
+	"type" : "yii2-extension",
+	"license": "MIT",
+	"support": {
+    "source": "https://github.com/szaboolcs/yii2-invisible-recaptcha",
+    "issues": "https://github.com/szaboolcs/yii2-invisible-recaptcha/issues"
+	},
+	"authors": {
+			"name": "szaboolcs",
+			"homepage": "https://github.com/szaboolcs"
+		}
+	],
+	"require": {
+    "yiisoft/yii2": "*"
+	},
+	"source": {
+    "url": "git@github.com:szaboolcs/yii2-invisible-recaptcha.git",
+    "type": "git",
+    "reference": "master"
+	},
+	"keywords" : [
+		"recaptcha",
+		"yii2"
+	],
+	"autoload": {
+    "psr-4": {
+      "szaboolcs\\recaptcha": ""
+    }
+	}
+}
