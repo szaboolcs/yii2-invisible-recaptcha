@@ -79,11 +79,11 @@ class InvisibleRecaptcha extends Widget
 		]);
 
 		return Html::button($this->name, [
-			'class'         => 'g-recaptcha recaptcha ' . $this->class,
+			'class'         => 'g-recaptcha recaptcha-'  .$callbackRandomString . ' ' . $this->class,
 			'data-sitekey'  => Yii::$app->captcha->siteKey,
 			'data-callback' => 'recaptchaCallback_' . $callbackRandomString
 		]) . Html::submitButton($this->name, [
-			'class' => $this->class. ' recaptcha submit hide'
+			'class' => $this->class. ' recaptcha-'  .$callbackRandomString . ' submit hide'
 		]);
 	}
 }
