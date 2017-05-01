@@ -8,53 +8,59 @@ use Yii;
 use yii\web\View;
 
 /**
- * @author szabo
- *
+ * Google invisible reCaptcha validator.
  */
 class InvisibleRecaptcha extends Widget
 {
 	/**
-	 * 
-	 * @var string
+	 * Google reCaptcha api file url.
 	 */
 	const JS_API_URL = '//www.google.com/recaptcha/api.js';
 
 	/**
-	 * 
-	 * @var string
+	 * @var string   Submit button text.
 	 */
 	public $name = 'Submit';
 
 	/**
-	 * 
-	 * @var unknown
+	 * @var string   reCaptcha siteKey.
 	 */
 	public $siteKey;
 
 	/**
-	 * 
-	 * @var unknown
+	 * @var string   reCaptcha secret key.
 	 */
 	public $secret;
 
 	/**
-	 * 
-	 * @var string
+	 * @var string   Submit button class(es).
 	 */
 	public $class = 'btn btn-primary btn-block';
 
 	/**
-	 * 
-	 * @var string
+	 * @var string   The form selector what in use the recaptcha.
 	 */
 	public $formSelector = 'form';
 
 	/**
-	 * 
-	 * @throws InvalidConfigException
-	 * @return string
+	 * @var string   Random string.
 	 */
-	public function run()
+	private $_randomString;
+
+	/**
+	 * Yii built in "constructor" which set the [_randomString] attribute.
+	 */
+	public function init()
+	{
+		$this->_randomString = time();
+	}
+
+	/**
+	 * Check component config.
+	 *
+	 * @throws InvalidConfigException
+	 */
+	protected function _checkConfig()
 	{
 		if (empty(Yii::$app->captcha)) {
 			throw new InvalidConfigException('Required `captcha` component isn\'t set.');
@@ -63,27 +69,63 @@ class InvisibleRecaptcha extends Widget
 		if (empty(Yii::$app->captcha->siteKey)) {
 			throw new InvalidConfigException('Required `siteKey` param isn\'t set.');
 		}
+	}
 
-		$callbackRandomString = time();
-		$callback             = 'var recaptchaCallback_' . $callbackRandomString . ' = function() {
-			$(\'button.recaptcha-' . $callbackRandomString . ':not(.submit)\').remove();
-			$(\'button.recaptcha-' . $callbackRandomString . '.submit\').removeClass(\'hide\');
-			$(\'' . $this->formSelector . '\').submit();
-		}';
-
-		$view = $this->getView();
-		
-		$view->registerJs($callback, View::POS_BEGIN);
-		$view->registerJsFile('https://www.google.com/recaptcha/api.js', [
+	/**
+	 * Register JS files and strings.
+	 * 
+	 * @return void
+	 */
+	protected function _registerJs($callBack)
+	{
+		$this->getView()->registerJs($this->_getCallbackFunction(), View::POS_BEGIN);
+		$this->getView()->registerJsFile(self::JS_API_URL, [
 			'position' => View::POS_END
 		]);
+	}
 
+	/**
+	 * Render buttons.
+	 * 
+	 * @return string   Buttons HTML string.
+	 */
+	protected function _getButtons()
+	{
 		return Html::button($this->name, [
-			'class'         => 'g-recaptcha recaptcha-'  .$callbackRandomString . ' ' . $this->class,
+			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->class,
 			'data-sitekey'  => Yii::$app->captcha->siteKey,
-			'data-callback' => 'recaptchaCallback_' . $callbackRandomString
+			'data-callback' => 'recaptchaCallback_' . $this->_randomString
 		]) . Html::submitButton($this->name, [
-			'class' => $this->class. ' recaptcha-'  .$callbackRandomString . ' submit hide'
+			'class' => $this->class. ' recaptcha-' . $this->_randomString . ' submit hide'
 		]);
+	}
+
+	/**
+	 * Render callback function to the reCaptcha button.
+	 * 
+	 * @return string   Callback function.
+	 */
+	protected function _getCallbackFunction()
+	{
+		return 'var recaptchaCallback_' . $this->_randomString. ' = function() {
+			$(\'button.recaptcha-' . $this->_randomString. ':not(.submit)\').remove();
+			$(\'button.recaptcha-' . $this->_randomString. '.submit\').removeClass(\'hide\');
+			$(\'' . $this->formSelector . '\').submit();
+		}';
+	}
+	
+	/**
+	 * Run the widget.
+	 * 
+	 * @throws InvalidConfigException
+	 * 
+	 * @return string   Google reCaptcha buttons.
+	 */
+	public function run()
+	{
+		$this->_checkConfig();
+		$this->_registerJs();
+
+		return $this->_getButtons();
 	}
 }

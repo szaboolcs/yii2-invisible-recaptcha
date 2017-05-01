@@ -5,28 +5,24 @@ use yii\helpers\Json;
 use Yii;
 
 /**
- * 
- * @author szabo
+ * Google invisible reCaptcha validator.
  *
  */
 class InvisibleRecaptchaValidator
 {
 	/**
-	 * 
-	 * @var string
+	 * Google reCaptcha validation URL and POST element name.
 	 */
 	const VERIFY_URL   = 'https://www.google.com/recaptcha/api/siteverify';
 	const POST_ELEMENT = 'g-recaptcha-response';
 	
 	/**
-	 * 
-	 * @var unknown
+	 * @var string   Google reCaptcha textarea value.
 	 */
 	private $_response;
 	
 	/**
-	 * 
-	 * @param string $response
+	 * @var string   Google reCaptcha textarea value.
 	 */
 	private function __construct($response)
 	{
@@ -34,10 +30,11 @@ class InvisibleRecaptchaValidator
 	}
 	
 	/**
+	 * Check component config.
 	 * 
 	 * @throws InvalidConfigException
 	 */
-	private function _checkConfig()
+	protected function _checkConfig()
 	{
 		if (empty(Yii::$app->captcha)) {
 			throw new InvalidConfigException('Required `captcha` component isn\'t set.');
@@ -47,36 +44,29 @@ class InvisibleRecaptchaValidator
 			throw new InvalidConfigException('Required `secret` param isn\'t set.');
 		}
 	}
-	
-	/**
-	 * 
-	 * @param unknown $data
-	 * @return unknown
-	 */
-	function _recaptcha_qsencode ($data) {
-		$req = "";
-		foreach ( $data as $key => $value )
-			$req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
-			
-			// Cut the last '&'
-			$req=substr($req,0,strlen($req)-1);
-			
-			return $req;
+
+	protected function _getValidationParams()
+	{
+		return [
+			'secret'   => Yii::$app->captcha->secret,
+			'response' => $this->_response,
+			'remoteip' => Yii::$app->request->userIP
+		];
 	}
 	
 	/**
+	 * Validate the response with curl.
 	 * 
-	 * @param array $params
-	 * @return bool
+	 * @return bool   If successed true, otherwise false.
 	 */
-	private function _validate(array $params)
+	protected function _validate()
 	{
 		$curl = curl_init();
 		
 		curl_setopt($curl, CURLOPT_URL, self::VERIFY_URL);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $this->_getValidationParams());
 		
 		$curlData = curl_exec($curl);
 		
@@ -86,26 +76,23 @@ class InvisibleRecaptchaValidator
 	}
 	
 	/**
+	 * Run validation.
 	 * 
 	 * @return bool
 	 */
 	public function run()
 	{
 		$this->_checkConfig();
-		
-		$params = [
-			'secret'   => Yii::$app->captcha->secret,
-			'response' => $this->_response,
-			'remoteip' => Yii::$app->request->userIP
-		];
-		
-		return $this->_validate($params);
+
+		return $this->_validate();
 	}
 	
 	/**
+	 * Run validation with singleton pattern.
 	 * 
-	 * @param string $response
-	 * @return bool
+	 * @var string   Google reCaptcha textarea value.
+	 * 
+	 * @return bool   If successed true, otherwise false.
 	 */
 	public static function validate($response)
 	{
