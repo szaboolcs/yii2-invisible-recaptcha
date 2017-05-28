@@ -35,7 +35,7 @@ class InvisibleRecaptcha extends Widget
 	/**
 	 * @var string   Submit button class(es).
 	 */
-	public $class = 'btn btn-primary btn-block';
+	public $btnClass = 'btn btn-primary btn-block';
 
 	/**
 	 * @var string   The form selector what in use the recaptcha.
@@ -92,11 +92,11 @@ class InvisibleRecaptcha extends Widget
 	protected function _getButtons()
 	{
 		return Html::button($this->name, [
-			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->class,
+			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->btnClass,
 			'data-sitekey'  => Yii::$app->captcha->siteKey,
 			'data-callback' => 'recaptchaCallback_' . $this->_randomString
 		]) . Html::submitButton($this->name, [
-			'class' => $this->class. ' recaptcha-' . $this->_randomString . ' submit hide'
+			'class' => $this->btnClass. ' recaptcha-' . $this->_randomString . ' submit hide'
 		]);
 	}
 
