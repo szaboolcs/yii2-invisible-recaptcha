@@ -33,7 +33,8 @@ class InvisibleRecaptcha extends Widget
 	public $secret;
 
 	/**
-	 * @var string   Submit button class(es).
+	 * @var string   Submit button 
+	 (es).
 	 */
 	public $btnClass = 'btn btn-primary btn-block';
 
@@ -97,7 +98,7 @@ class InvisibleRecaptcha extends Widget
 	protected function _getButtons()
 	{
 		return Html::button($this->name, [
-			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->btnClass,
+			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->bntClass,
 			'data-sitekey'  => Yii::$app->captcha->siteKey,
 			'data-callback' => 'recaptchaCallback_' . $this->_randomString,
 			'data-badge' => $this->badgePosition,
