@@ -98,7 +98,7 @@ class InvisibleRecaptcha extends Widget
 	protected function _getButtons()
 	{
 		return Html::button($this->name, [
-			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->bntClass,
+			'class'         => 'g-recaptcha recaptcha-' . $this->_randomString . ' ' . $this->btnClass,
 			'data-sitekey'  => Yii::$app->captcha->siteKey,
 			'data-callback' => 'recaptchaCallback_' . $this->_randomString,
 			'data-badge' => $this->badgePosition,
