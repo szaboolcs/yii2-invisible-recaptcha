@@ -21,7 +21,7 @@ to the require section of your application's composer.json file.
 'components' =>  [
   'captcha' => [
     'name'    => 'captcha',
-    'class'   => 'szaboolcs\InvisibleRecaptcha',
+    'class'   => 'szaboolcs\recaptcha\InvisibleRecaptcha',
     'siteKey' => 'your siteKey',
     'secret'  => 'your secret'
   ]
