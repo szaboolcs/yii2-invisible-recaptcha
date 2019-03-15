@@ -75,7 +75,7 @@ class LoginController
 
     $model->load(Yii::$app->request->post());
 
-    if ($model->validate() && InvisibleRecaptchaValidator::validate(Yii::$app->request->post(InvisibleRecaptchaValidatior::POST_ELEMENT)) && Yii::$app->user->login($model->getUser())) {
+    if ($model->validate() && InvisibleRecaptchaValidator::validate(Yii::$app->request->post(InvisibleRecaptchaValidator::POST_ELEMENT)) && Yii::$app->user->login($model->getUser())) {
       return $this->goHome();
     }
 
